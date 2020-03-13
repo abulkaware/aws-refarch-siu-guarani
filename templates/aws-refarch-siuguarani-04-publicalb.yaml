@@ -1,0 +1,201 @@
+
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: Creacion del ALB - Stack para hacer un deployment del sistema SIU Guarani
+
+Metadata:
+
+  Authors:
+    Description: Marcos Boaglio (mboaglio@amazon.com)
+  License:
+    Description: 'Copyright 2020 Amazon.com, Inc. and its affiliates. All Rights Reserved.
+                  SPDX-License-Identifier: MIT-0'
+
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+    - Label:
+        default: Parametros del ALB
+      Parameters:
+        - Vpc
+        - PublicAlbAcmCertificate
+        - PublicAlbSecurityGroup
+        - NumberOfSubnets
+        - Subnet
+    ParameterLabels:
+      Vpc:
+        default: Vpc Id
+      PublicAlbAcmCertificate:
+        default: ARN del Certificado del ALB
+      PublicAlbSecurityGroup:
+        default: Security Group del ALB
+      NumberOfSubnets:
+        default: Numero de subnets
+      Subnet:
+        default: Subnets
+
+Parameters:
+
+  NumberOfSubnets:
+    AllowedValues:
+    - 2
+    - 3
+    - 4
+    - 5
+    - 6
+    Default: 2
+    Description: Cantidad de subnets. Tiene que matchear con la selección de subnets de abajo.
+    Type: String 
+  PublicAlbAcmCertificate:
+    AllowedPattern: ^$|(arn:aws:acm:)([a-z0-9/:-])*([a-z0-9])$
+    Description: '[ Opcional ] ARN del certificado del ALB.'
+    Type: String
+  PublicAlbSecurityGroup:
+    Description: Security group del ALB.
+    Type: AWS::EC2::SecurityGroup::Id
+  Subnet:
+    Description: Seleccione las subnets. La cantidad seleccionada tiene que matchear la cantidad de arriba y tienen que estar en AZs diferentes.
+    Type: List<AWS::EC2::Subnet::Id>
+  Vpc:
+    Description: Seleccione un Vpc existente
+    Type: AWS::EC2::VPC::Id
+
+Conditions:
+
+  SslCertificate:
+    !Not [!Equals [ '', !Ref PublicAlbAcmCertificate ] ]
+  NoSslCertificate:
+    !Equals [ '', !Ref PublicAlbAcmCertificate ]
+  NumberOfSubnets1:
+      !Equals [ 1, !Ref NumberOfSubnets ]
+  NumberOfSubnets2:
+      !Equals [ 2, !Ref NumberOfSubnets ]
+  NumberOfSubnets3:
+      !Equals [ 3, !Ref NumberOfSubnets ]
+  NumberOfSubnets4:
+      !Equals [ 4, !Ref NumberOfSubnets ]
+  NumberOfSubnets5:
+      !Equals [ 5, !Ref NumberOfSubnets ]
+  NumberOfSubnets6:
+      !Equals [ 6, !Ref NumberOfSubnets ]
+  Subnet0: !Or
+    - !Condition NumberOfSubnets1
+    - !Condition NumberOfSubnets2
+    - !Condition NumberOfSubnets3
+    - !Condition NumberOfSubnets4
+    - !Condition NumberOfSubnets5
+    - !Condition NumberOfSubnets6
+  Subnet1: !Or
+    - !Condition NumberOfSubnets2
+    - !Condition NumberOfSubnets3
+    - !Condition NumberOfSubnets4
+    - !Condition NumberOfSubnets5
+    - !Condition NumberOfSubnets6
+  Subnet2: !Or
+    - !Condition NumberOfSubnets3
+    - !Condition NumberOfSubnets4
+    - !Condition NumberOfSubnets5
+    - !Condition NumberOfSubnets6
+  Subnet3: !Or
+    - !Condition NumberOfSubnets4
+    - !Condition NumberOfSubnets5
+    - !Condition NumberOfSubnets6
+  Subnet4: !Or
+    - !Condition NumberOfSubnets5
+    - !Condition NumberOfSubnets6
+  Subnet5: !Condition NumberOfSubnets6
+
+Resources:
+  
+  PublicAlbListenerNoSslCertificate:
+    Type : AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions:
+      - Type: forward
+        TargetGroupArn: !Ref PublicAlbTargetGroup
+      LoadBalancerArn: !Ref PublicApplicationLoadBalancer
+      Port: 80
+      Protocol: HTTP
+  PublicAlbListenerSslCertificate:
+    Condition: SslCertificate
+    Type : AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      Certificates:
+      - CertificateArn: !Ref PublicAlbAcmCertificate
+      DefaultActions:
+      - Type: forward
+        TargetGroupArn: !Ref PublicAlbTargetGroup
+      LoadBalancerArn: !Ref PublicApplicationLoadBalancer
+      Port: 443
+      Protocol: HTTPS
+  PublicApplicationLoadBalancer: 
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Scheme: internet-facing
+      Subnets:
+        !If
+          [ NumberOfSubnets1,
+          [ !Select [ 0, !Ref Subnet ] ],
+          !If
+            [ NumberOfSubnets2,
+            [ !Select [ 0, !Ref Subnet ], !Select [ 1, !Ref Subnet ] ],
+            !If
+              [ NumberOfSubnets3,
+              [ !Select [ 0, !Ref Subnet ], !Select [ 1, !Ref Subnet ], !Select [ 2, !Ref Subnet ] ],
+              !If
+                [ NumberOfSubnets4,
+                [ !Select [ 0, !Ref Subnet ], !Select [ 1, !Ref Subnet ], !Select [ 2, !Ref Subnet ], !Select [ 3, !Ref Subnet ] ],
+                !If
+                  [ NumberOfSubnets5,
+                  [ !Select [ 0, !Ref Subnet ], !Select [ 1, !Ref Subnet ], !Select [ 2, !Ref Subnet ], !Select [ 3, !Ref Subnet ], !Select [ 4, !Ref Subnet ] ],
+                  [ !Select [ 0, !Ref Subnet ], !Select [ 1, !Ref Subnet ], !Select [ 2, !Ref Subnet ], !Select [ 3, !Ref Subnet ], !Select [ 4, !Ref Subnet ], !Select [ 5, !Ref Subnet ] ]
+                  ]
+                ]
+              ]
+            ]
+          ]
+      LoadBalancerAttributes:
+      - Key: idle_timeout.timeout_seconds
+        Value: 60
+      SecurityGroups:
+      - !Ref PublicAlbSecurityGroup
+      Tags:
+      - Key: Name
+        Value: !Join [ '', [ 'Public ALB / ', !Ref 'AWS::StackName' ] ]
+      - Key: CentroDeCosto
+        Value: SIUGuarani
+  PublicAlbTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckIntervalSeconds: 30
+      HealthCheckPath: /
+      HealthCheckTimeoutSeconds: 5
+      Port: 80
+      Protocol: HTTP
+      Tags:
+      - Key: Name
+        Value: !Join [ '', [ 'Public ALB / ', !Ref 'AWS::StackName' ] ]
+      - Key: CentroDeCosto
+        Value: SIUGuarani
+      UnhealthyThresholdCount: 5
+      VpcId: !Ref Vpc
+
+Outputs:
+
+  PublicAlbTargetGroupArn:
+    Value:
+      !Ref PublicAlbTargetGroup
+  PublicAlbCanonicalHostedZoneId:
+    Value:
+      !GetAtt PublicApplicationLoadBalancer.CanonicalHostedZoneID
+  PublicAlbDnsName:
+    Value:
+      !GetAtt PublicApplicationLoadBalancer.DNSName
+  PublicAlbFullName:
+    Value:
+      !GetAtt PublicApplicationLoadBalancer.LoadBalancerFullName
+  PublicAlbHostname:
+    Value:
+      !If [ NoSslCertificate, !Join [ '', [ 'http://', !GetAtt PublicApplicationLoadBalancer.DNSName ] ], !Join [ '', [ 'https://', !GetAtt PublicApplicationLoadBalancer.DNSName ] ] ]
+  SslCertificate:
+    Value:
+      !If [ SslCertificate, True, False ]
