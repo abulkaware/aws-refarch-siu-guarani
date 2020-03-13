@@ -15,6 +15,7 @@
 # $14 TOBA Clave toba
 # $15 Nombre del bucket
 
+cd /tmp
 sudo sh -c 'aws s3 ls s3://$15/guarani.tar.gz > install_s_n.txt'
 if [ -s "install_s_n.txt" ]
 then
