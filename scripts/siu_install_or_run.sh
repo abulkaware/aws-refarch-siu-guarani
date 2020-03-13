@@ -16,11 +16,13 @@
 # $15 Nombre del bucket
 
 cd /tmp
-sudo sh -c 'aws s3 ls s3://$15/guarani.tar.gz > install_s_n.txt'
+echo ${15}
+sudo sh -c 'aws s3 ls s3://$15/guarani.tar.gz'
+sudo sh -c 'aws s3 ls s3://${15}/guarani.tar.gz > install_s_n.txt'
 if [ -s "install_s_n.txt" ]
 then
   # El archivo existe ... lo bajo y lo instalo
-  sudo aws s3 cp s3://$15/guarani.tar.gz .
+  sudo aws s3 cp s3://${15}/guarani.tar.gz .
   sudo sh -c 'gunzip guarani.tar.gz'
   sudo sh -c 'tar xvf guarani.tar /usr/local/proyectos/guarani/'
 else
