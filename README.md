@@ -31,12 +31,12 @@ El deployment se realiza mediante el uso de: [AWS CloudFormation](http://docs.aw
 
 Esta arquitectura puede ser excesiva para algunas implementaciones de SIU-Guarani, es por ello que las plantillas que la componen pueden ejecutarse en forma individual (ver instalación detallada). Para este punto se recomienda como mínimo implementar las  las plantillas hasta el load balancer (VPC, Security Groups, Bastion Host y Public ALB). De esta forma se minimizan los costos y se deja el ambiente preparado para cuando llegue el momento de escalar.
 
-## Instalación simple [EN DSARROLLO]
+## Instalación simple [EN DESARROLLO]
 
 Si desea implementar el sistema SIU Guarani en forma rapida, siga estos pasos. Puede leer los detalles despues para comprender mejor la arquitectura.
 
 1) Si tiene previsto utilizar TLS, debe crear o importar su certificado en Amazon Certificate Manager antes de lanzar SIU-Guarani.
-2) Haga el deployment del stack de Cloud Formation aws-refarch-siuguarani-00-master.yaml (TODO) presionando alguno de los botones de la siguiente tabla. Necesita tener la cuenta de AWS creada previamente.
+2) Haga el deployment del stack de Cloud Formation aws-refarch-siuguarani-00-master.yaml [EN DESARROLLO] presionando alguno de los botones de la siguiente tabla. Necesita tener la cuenta de AWS creada previamente.
 
 | Codigo de region AWS | Nombre | Launch |
 | --- | --- | --- 
@@ -60,7 +60,7 @@ En las secciones siguientes se describen los componentes individuales de la arqu
 
 ### Detalle de templates YAML
 
-#### aws-refarch-siuguarani-00-master.yaml (TODO)
+#### aws-refarch-siuguarani-00-master.yaml [EN DESARROLLO]
 Template general que permite hacer una instalación completa de la arquitectura de referencia.
 
 #### aws-refarch-siuguarani-01-newvpc.yaml
@@ -75,16 +75,16 @@ Arma el Bastion Host y su grupo de autoscaling
 #### aws-refarch-siuguarani-04-publicalb.yaml
 Arma el Load Balancer Publico
 
-#### aws-refarch-siuguarani-05-rds-cluster-aurora-postgres.yaml (TODO)
+#### aws-refarch-siuguarani-05-rds-cluster-aurora-postgres.yaml [EN DESARROLLO]
 Arma un Cluster de Amazon RDS Aurora Postgres 9.6. Si se utiliza este template, no se debe utilizar el aws-refarch-siuguarani-05-rds-postgres.yaml ya que ambos crean la base de datos. Se debe definir uno de los dos. 
 
-#### aws-refarch-siuguarani-05-rds-postgres.yaml (TODO)
+#### aws-refarch-siuguarani-05-rds-postgres.yaml [EN DESARROLLO]
 Arma el Amazon RDS Postgres 9.6. Si se utiliza este template, no se debe utilizar el aws-refarch-siuguarani-05-rds-cluster-aurora-postgres.yaml ya que ambos crean la base de datos. Se debe definir uno de los dos.
 
 #### aws-refarch-siuguarani-06-cloudfront.yaml
 Arma la distribución de CloudFront
 
-#### aws-refarch-siuguarani-08-web.yaml (TODO)
+#### aws-refarch-siuguarani-08-web.yaml [EN DESARROLLO]
 Arma el primer web server del front end. Se conecta al SVN y baja el codigo de SIU (es necesario tener un usuario y password autorizado por SIU). Finalmente arma el grupo de autoscaling.
 Para el armado del webserver utiliza los scripts de la carpeta "scripts". 
 Los scripts automatizan la instalación y se basan en los siguientes links con instrucciones de SIU para instalar la versión 3.17:
@@ -95,7 +95,7 @@ http://documentacion.siu.edu.ar/wiki/SIU-Guarani/version3.17.0/instalacion_desde
 #### aws-refarch-siuguarani-09-route53.yaml
 Arma el DNS usando Amazon Route53
 
-#### aws-refarch-siuguarani-10-dashboard.yaml (TODO)
+#### aws-refarch-siuguarani-10-dashboard.yaml [EN DESARROLLO]
 Arma el Dashboard de monitoreo de la solución completa
 
 ## Servicios AWS utilizados en la arquitectura
