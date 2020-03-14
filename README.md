@@ -24,10 +24,10 @@ La aquitectura se implementa mediante el uso de los siguientes servicios de AWS:
 [Elastic Load Balancing (Application Load Balancer)](http://docs.aws.amazon.com/elasticbalancing/latest/application/introduction.html), 
 [Amazon Relational Database Service (Amazon RDS)](http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Welcome.html), 
 [Amazon CloudFront](http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html), 
-[Amazon Route 53](http://docs.amazon.amazon.com/Amazon Route 53)(http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html) y
+[Amazon Route 53](http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html) y
 [Amazon Certificate Manager (Amazon ACM)](http://docs.aws.amazon.com/acm/latest/userguide/acm-overview.html). 
 
-Todos ellos mediante el uso de: [AWS CloudFormation](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/Welcome.html). 
+El deployment se realiza mediante el uso de: [AWS CloudFormation](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/Welcome.html). 
 
 Esta arquitectura puede ser excesiva para muchas implementaciones de SIU-Guarani, sin embargo, las plantillas se pueden ejecutar individualmente o modificar para implementar un subconjunto de la arquitectura que se adapte a sus necesidades (ver instalación detallada). Para este punto se recomienda como mínimo implementar las todas las plantillas hasta el load balanc er (VPC, Security Groups, Bastion Host y Public ALB). De esta forma se puede implementar una arquitectura preparada para crecer lista para cuando llegue el momento.
 
