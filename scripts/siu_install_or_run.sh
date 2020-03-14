@@ -25,11 +25,12 @@ echo command STOP
 aws s3 ls s3://${15}/guarani.tar.gz > install_s_n.txt
 if [ -s "install_s_n.txt" ]
 then
-  # El archivo existe ... lo bajo y lo instalo
+  echo El archivo existe ... lo bajo y lo instalo
   sudo aws s3 cp s3://${15}/guarani.tar.gz .
   sudo sh -c 'gunzip guarani.tar.gz'
   sudo sh -c 'tar xvf guarani.tar -C /'
 else
-  # El archivo no existe ... hago una instalacion desde cero.
+  echo El archivo no existe ... hago una instalacion desde cero.
+  echo $1 $2 $3 $4 $5 $6 $7 $8 $9 ${10} ${11} ${12} ${13} ${14} ${15}
   ./siu_install_run_once.sh $1 $2 $3 $4 $5 $6 $7 $8 $9 ${10} ${11} ${12} ${13} ${14} ${15}
 fi
