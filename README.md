@@ -76,8 +76,12 @@ Arma el Amazon RDS Postgres 9.6. Si se utiliza este template, no se debe utiliza
 Arma la distribución de CloudFront
 
 #### aws-refarch-siuguarani-08-web.yaml (TODO)
-Arma el primer web server del front end. Se conecta al SVN y baja el codigo de SIU
-Arma el grupo de autoscaling
+Arma el primer web server del front end. Se conecta al SVN y baja el codigo de SIU (es necesario tener un usuario y password autorizado por SIU). Finalmente arma el grupo de autoscaling.
+Para el armado del webserver utiliza los scripts de la carpeta "scripts". 
+Los scripts automatizan la instalación y se basan en los siguientes links con instrucciones de SIU para instalar la versión 3.17:
+http://documentacion.siu.edu.ar/wiki/SIU-Guarani/version3.17.0/instalacion_desde_cero/requisitos_previos/linux
+http://documentacion.siu.edu.ar/wiki/SIU-Guarani/version3.17.0/instalacion_desde_cero/produccion/gestion/linux
+
 
 #### aws-refarch-siuguarani-09-route53.yaml
 Arma el DNS usando Amazon Route53
