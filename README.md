@@ -101,27 +101,32 @@ Arma el Dashboard de monitoreo de la solución completa
 
 ## Servicios AWS utilizados en la arquitectura
 
-### Administrador de certificados de AWS
+### Red virtual privada en la nube (VPC): [Amazon Virtual Private Cloud (Amazon VPC)](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Introduction.html)
+Aprovisione una sección aislada de forma lógica de la nube de AWS donde pueda lanzar recursos de AWS en una red virtual que usted defina
 
+### Elastic compute cloud (EC2) de capacidad modificable: [Amazon Elastic Compute Cloud (Amazon EC2)](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html)
+Capacidad informática en la nube segura y de tamaño modificable. Lance aplicaciones cuando sea necesario sin compromisos iniciales.
+
+### Servicio de bases de datos relacionales (RDS): [Amazon Relational Database Service (Amazon RDS)](http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Welcome.html)
+Configure, use y escale una base de datos relacional en la nube con tan solo unos clics.
+
+### Administrador de certificados de AWS: [Amazon Certificate Manager (Amazon ACM)](http://docs.aws.amazon.com/acm/latest/userguide/acm-overview.html) 
 AWS Certificate Manager es un servicio que le permite aprovisionar, administrar e implementar fácilmente certificados SSL/TLS (Secure Sockets Layer/Transport Layer Security) para su uso con los servicios de AWS. Debe ejecutar SSL/TLS para proteger sesiones y contraseñas. Si tiene previsto utilizar Transport Layer Security (TLS), debe crear o importar un certificado TLS en AWS Certificate Manager antes de lanzar la plantilla. Además, si utiliza CloudFront y aloja SIU-Guarani en una región distinta de us-east-1, debe crear o importar el certificado tanto en us-east-1 como en la región en la que hospeda SIU-Guarani. CloudFront siempre utiliza certificados de us-east-1.
 
-### Balanceador de carga de aplicaciones
+### Balanceador de carga de aplicaciones: [Elastic Load Balancing (Application Load Balancer)](http://docs.aws.amazon.com/elasticbalancing/latest/application/introduction.html) 
 
 Un Balanceador de carga de aplicaciones distribuye el tráfico de aplicaciones entrantes entre varias instancias EC2 en varias zonas de disponibilidad. Para lograr una alta disponibilidad, puede agrupar varios servidores SIU-Guarani detrás de un equilibrador de carga.  
 
-### Autoescalado de Amazon
-
+### Autoescalado de Amazon: [Auto Scaling](http://aws.amazon.com/autoscaling/latest/userguide/WhatIsAutoScaling.html)
 Amazon EC2 Auto Scaling le ayuda a asegurarse de que tiene el número correcto de instancias Amazon EC2 disponibles para gestionar la carga de la aplicación. La plantilla configura el escalado automático en función de la utilización de la CPU. Se agrega una instancia adicional cuando la utilización media de la CPU supera el 75% durante tres minutos y se quita cuando la utilización media de la CPU es inferior al 25 % durante tres minutos. Según el tipo de instancia que esté ejecutando, la configuración de caché que elija y otros factores, es posible que otra métrica sea un mejor predictor de carga. Siéntase libre de cambiar las métricas según sea necesario.
-
 *Tenga en cuenta que el asistente de instalación provoca picos en la CPU que podrían hacer que el clúster se escale inesperadamente. Inicialmente, debe implementar un único servidor estableciendo el tamaño min y máximo de ASG en uno. A continuación, complete el asistente de configuración de SIU-Guarani y actualice la pila de CloudFormation estableciendo el tamaño min y max de ASG a los límites deseados.*
 
 
-#### Amazon CloudFront
+### Amazon CloudFront: [Amazon CloudFront](http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html)
 
 Amazon CloudFront es un servicio de red de entrega de contenido global (CDN) que ofrece de forma segura datos, vídeos, aplicaciones y API a sus espectadores con baja latencia y altas velocidades de transferencia. Opcionalmente, la plantilla puede configurar CloudFront para almacenar en caché contenido más cercano a los usuarios. Esto es especialmente beneficioso si los usuarios están repartidos en un área geográfica grande. Por ejemplo, estudiantes remotos en un programa en línea.
 
-### Amazon Route 53 (DNS)
-
+### Amazon Route 53 (DNS): [Amazon Route 53](http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html)
 Amazon Route 53 es un servicio web de sistema de nombres de dominio (DNS) en la nube (DNS) de alta disponibilidad y escalable. Opcionalmente, la plantilla configurará un alias de Route53 que apunte al Balanceador de carga de aplicaciones o A CloudFront. Si utiliza otro sistema DNS, debe crear un registro CNAME en su sistema DNS para hacer referencia al Balanceador de carga de aplicaciones o A CloudFront (si está implementado). Si no tiene acceso a DNS, puede dejar Nombre de dominio en blanco y la plantilla configurará Moodle para que use el nombre de dominio de Application Load Balancer generado automáticamente.
 
 ## Licencia
