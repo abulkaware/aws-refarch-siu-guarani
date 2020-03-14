@@ -21,25 +21,30 @@ La aquitectura se implementa mediante el uso de [Amazon Virtual Private Cloud (A
 
 Esta arquitectura puede ser excesiva para muchas implementaciones de SIU-Guarani, sin embargo, las plantillas se pueden ejecutar individualmente o modificar para implementar un subconjunto de la arquitectura que se adapte a sus necesidades. Para este punto se recomienda como mínimo implementar las todas las plantillas hasta el load balanc er (VPC, Security Groups, Bastion Host y Public ALB). De esta forma se puede implementar una arquitectura preparada para crecer lista para cuando llegue el momento.
 
-## TL;DR
+## Instalación simple
 
-Si solo desea implementar el sistema SIU Guarani, siga estos pasos. Puede leer los detalles a continuación para comprender mejor la arquitectura.
+Si desea implementar el sistema SIU Guarani en forma rapida, siga estos pasos. Puede leer los detalles despues para comprender mejor la arquitectura.
 
 1) Si tiene previsto utilizar TLS, debe crear o importar su certificado en Amazon Certificate Manager antes de lanzar SIU-Guarani.
-2) Instale el stack de Cloud Formation 00-master.yaml.
+2) Instale el stack de Cloud Formation aws-refarch-siuguarani-00-master.yaml (TODO)
 3) Una vez finalizada la instalación del stack, vaya al sitio web para completar la configuración de SIU-Guarani.
 
 Puede lanzar este stack de CloudFormation, con su cuenta, en las siguientes regiones de AWS. 
 
 | Codigo de region AWS | Nombre | Launch |
 | --- | --- | --- 
-| us-east-1 |US East (N. Virginia)| [![cloudformation-launch-stack](images/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=Moodle&templateURL=https://s3.amazonaws.com/aws-refarch/siu-guarani/latest/templates/00-master.yaml) |
-| sa-east-1 |San Pablo (Brasil)| [![cloudformation-launch-stack](images/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=sa-east-1#/stacks/new?stackName=Moodle&templateURL=https://s3.amazonaws.com/aws-refarch/siu-guarani/latest/templates/00-master.yaml) |
+| us-east-1 |US East (N. Virginia)| [![cloudformation-launch-stack](images/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=Moodle&templateURL=https://s3.amazonaws.com/aws-refarch/siu-guarani/latest/templates/aws-refarch-siuguarani-00-master.yaml) |
+| sa-east-1 |San Pablo (Brasil)| [![cloudformation-launch-stack](images/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=sa-east-1#/stacks/new?stackName=Moodle&templateURL=https://s3.amazonaws.com/aws-refarch/siu-guarani/latest/templates/aws-refarch-siuguarani-00-master.yaml) |
 
+## Instalación detallada
+
+Haga el deploy de los templates que se encuantran en la carpeta "templates". Uno por uno, en el orden en el que estan numerados, y completando la información que se solicita en cada uno.
+Preste atención a que muchos de los parámetros que se piden en un template son datos de output o parámetros de otros templates.
+La forma mas simple de realizar el deploy es bajar los archivos yaml a una carpeta local, e iniciar el deploy de cada uno desde la consola de Cloud Formation (opción "Create Stack with new resources" -> "Upload a template file").
 
 ## Arquitectura
 
-En las secciones siguientes se describen los componentes individuales de la arquitectura. Esta arquitectura toma varias cosas de la [Arquitectura de Referencia de WordPress](https://github.com/awslabs/aws-refarch-wordpress). 
+En las secciones siguientes se describen los componentes individuales de la arquitectura. Esta arquitectura toma varias cosas de la [Arquitectura de Referencia de WordPress](https://github.com/awslabs/aws-refarch-wordpress). Puede consultarla en forma adicional para tomar ideas de mejoras. 
 
 ![](images/aws-refarch-SIU-Guarani-architecture.jpg)
 
@@ -67,16 +72,14 @@ Arma un Cluster de Amazon RDS Aurora Postgres 9.6. Si se utiliza este template, 
 #### aws-refarch-siuguarani-05-rds-postgres.yaml (TODO)
 Arma el Amazon RDS Postgres 9.6. Si se utiliza este template, no se debe utilizar el aws-refarch-siuguarani-05-rds-cluster-aurora-postgres.yaml ya que ambos crean la base de datos. Se debe definir uno de los dos.
 
-#### aws-refarch-siuguarani-06-cloudfront.yaml (TODO)
+#### aws-refarch-siuguarani-06-cloudfront.yaml
 Arma la distribución de CloudFront
 
-#### aws-refarch-siuguarani-07-web-run-once.yml (TODO)
-Arma el primer web server del front end. Se conecta al SVN y baja el codigo de SIU
-
 #### aws-refarch-siuguarani-08-web.yaml (TODO)
+Arma el primer web server del front end. Se conecta al SVN y baja el codigo de SIU
 Arma el grupo de autoscaling
 
-#### aws-refarch-siuguarani-09-route53.yaml (TODO)
+#### aws-refarch-siuguarani-09-route53.yaml
 Arma el DNS usando Amazon Route53
 
 #### aws-refarch-siuguarani-10-dashboard.yaml (TODO)
