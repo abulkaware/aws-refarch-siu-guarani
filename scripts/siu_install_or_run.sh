@@ -16,7 +16,13 @@
 # $15 Nombre del bucket
 
 cd /tmp
-sudo sh -c 'aws s3 ls s3://${15}/guarani.tar.gz > install_s_n.txt'
+echo bucket:
+echo ${15}
+echo command START
+aws s3 ls s3://${15}/guarani.tar.gz
+echo command STOP
+
+aws s3 ls s3://${15}/guarani.tar.gz > install_s_n.txt
 if [ -s "install_s_n.txt" ]
 then
   # El archivo existe ... lo bajo y lo instalo
