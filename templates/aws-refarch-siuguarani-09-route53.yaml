@@ -1,0 +1,57 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: Crea un Route 53 record set - Deployment del sistema SIU Guarani
+
+Metadata:
+
+  Authors:
+    Description: Marcos Boaglio (mboaglio@amazon.com)
+  License:
+    Description: 'Copyright 2020 Amazon.com, Inc. and its affiliates. All Rights Reserved.
+                  SPDX-License-Identifier: MIT-0'
+
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+    - Label:
+        default: Parametros de Route 53
+      Parameters:
+        - SIUDomainName
+        - DnsEndpoint
+        - DnsHostId
+    ParameterLabels:
+      DnsEndpoint:
+        default: Endpoint del DNS
+      DnsHostId:
+        default: Host Id del DNS
+      SIUDomainName:
+        default: Dominio del sitio
+
+Parameters:
+
+  DnsEndpoint:
+    AllowedPattern: ^(?!http)(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$
+    Description: Endpoint del DNS - si se usa CloudFront, el CloudFront DNS. Sino el nombre publico del DNS del ELB.
+    Type: String
+  DnsHostId:
+    AllowedPattern: ^[A-Z0-9]{14}$
+    Description: zone id del DNS host - 'E3MY4J6ZOZB49L' si se usa CloudFront. sino el ELB host zone id publico.
+    Type: String
+  SIUDomainName:
+    AllowedPattern: ^(?!http)(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$
+    Description: Nombre del dominio del sitio (e.g. siu.universidad.edu.ar).
+    Type: String
+
+Resources:
+
+  RecordSet:
+    Type: AWS::Route53::RecordSetGroup
+    Properties:
+      HostedZoneName: !Join ['', [!Ref SIUDomainName, '.']]
+      RecordSets:
+      - Name: !Join ['', ['www.', !Ref SIUDomainName, '.']]
+        Type: A
+        AliasTarget:
+          DNSName: !Ref DnsEndpoint
+          EvaluateTargetHealth: True
+          HostedZoneId: !Ref DnsHostId
