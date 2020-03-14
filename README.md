@@ -29,22 +29,21 @@ La aquitectura se implementa mediante el uso de los siguientes servicios de AWS:
 
 El deployment se realiza mediante el uso de: [AWS CloudFormation](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/Welcome.html). 
 
-Esta arquitectura puede ser excesiva para muchas implementaciones de SIU-Guarani, sin embargo, las plantillas se pueden ejecutar individualmente o modificar para implementar un subconjunto de la arquitectura que se adapte a sus necesidades (ver instalación detallada). Para este punto se recomienda como mínimo implementar las todas las plantillas hasta el load balanc er (VPC, Security Groups, Bastion Host y Public ALB). De esta forma se puede implementar una arquitectura preparada para crecer lista para cuando llegue el momento.
+Esta arquitectura puede ser excesiva para algunas implementaciones de SIU-Guarani, es por ello que las plantillas que la componen pueden ejecutarse en forma individual (ver instalación detallada). Para este punto se recomienda como mínimo implementar las  las plantillas hasta el load balancer (VPC, Security Groups, Bastion Host y Public ALB). De esta forma se minimizan los costos y se deja el ambiente preparado para cuando llegue el momento de escalar.
 
 ## Instalación simple
 
 Si desea implementar el sistema SIU Guarani en forma rapida, siga estos pasos. Puede leer los detalles despues para comprender mejor la arquitectura.
 
 1) Si tiene previsto utilizar TLS, debe crear o importar su certificado en Amazon Certificate Manager antes de lanzar SIU-Guarani.
-2) Instale el stack de Cloud Formation aws-refarch-siuguarani-00-master.yaml (TODO)
-3) Una vez finalizada la instalación del stack, vaya al sitio web para completar la configuración de SIU-Guarani.
-
-Puede lanzar este stack de CloudFormation, con su cuenta, en las siguientes regiones de AWS. 
+2) Haga el deployment del stack de Cloud Formation aws-refarch-siuguarani-00-master.yaml (TODO) presionando alguno de los botones de la siguiente tabla. Necesita tener la cuenta de AWS creada previamente.
 
 | Codigo de region AWS | Nombre | Launch |
 | --- | --- | --- 
 | us-east-1 |US East (N. Virginia)| [![cloudformation-launch-stack](images/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=Moodle&templateURL=https://s3.amazonaws.com/aws-refarch/siu-guarani/latest/templates/aws-refarch-siuguarani-00-master.yaml) |
 | sa-east-1 |San Pablo (Brasil)| [![cloudformation-launch-stack](images/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=sa-east-1#/stacks/new?stackName=Moodle&templateURL=https://s3.amazonaws.com/aws-refarch/siu-guarani/latest/templates/aws-refarch-siuguarani-00-master.yaml) |
+
+3) Una vez finalizado el deployment, vaya al sitio web para completar la configuración de SIU Guarani.
 
 ## Instalación detallada
 
