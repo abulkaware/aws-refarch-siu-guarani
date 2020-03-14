@@ -31,7 +31,7 @@ El deployment se realiza mediante el uso de: [AWS CloudFormation](http://docs.aw
 
 Esta arquitectura puede ser excesiva para algunas implementaciones de SIU-Guarani, es por ello que las plantillas que la componen pueden ejecutarse en forma individual (ver instalación detallada). Para este punto se recomienda como mínimo implementar las  las plantillas hasta el load balancer (VPC, Security Groups, Bastion Host y Public ALB). De esta forma se minimizan los costos y se deja el ambiente preparado para cuando llegue el momento de escalar.
 
-## Instalación simple
+## Instalación simple [EN DSARROLLO]
 
 Si desea implementar el sistema SIU Guarani en forma rapida, siga estos pasos. Puede leer los detalles despues para comprender mejor la arquitectura.
 
