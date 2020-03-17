@@ -10,12 +10,13 @@
 ¿Errores o correcciones? Envíenos un correo electrónico a [mboaglio@amazon.com](mailto:mboaglio@amazon.com).
 
 ---
-
 ## Descripción general
 
 Esta arquitectura de referencia proporciona un conjunto de plantillas YAML que ayudan a impementar un entorno [SIU Guarani](https://www.siu.edu.ar/siu-guarani) con alta disponibilidad, elástico y escalable en AWS. 
 
 A su vez, SIU Guaraní registra las actividades de la gestión académica dentro de las universidades desde que un alumno se inscribe hasta que egresa. El objetivo de SIU Guaraní es la administración de las tareas académicas en forma óptima y segura, con la finalidad de obtener información consistente para los niveles operativos y directivos. Para mas información consulte al equipo de [SIU](https://www.siu.edu.ar/siu-guarani).
+
+Si esta evaluando implementar SIU en AWS podemos ayudar!! Escribanos desde la dirección de mail de la universidad a [creditos-siu@amazon.com](creditos-siu@amazon.com)
 
 La aquitectura se implementa mediante el uso de los siguientes servicios de AWS:
 [Amazon Virtual Private Cloud (Amazon VPC)](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Introduction.html),
